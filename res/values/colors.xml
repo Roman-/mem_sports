@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="tvBack1">#000000</color>
+    <color name="tvBack2">#222222</color>
+    <color name="MemoBackground">#000000</color>
+    <color name="memoTextColor">#ffffff</color>
+    
+</resources>

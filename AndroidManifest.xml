@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.Roman.memorysportssim"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="18"
+        android:targetSdkVersion="18" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".activities.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.NumbersSettings"
+            android:label="@string/title_activity_numbers_settings" >
+        </activity>
+        <activity
+            android:name=".activities.NumbersMemo"
+            android:label="@string/title_activity_numbers_memo" >
+        </activity>
+        <activity
+            android:name=".activities.NumbersRecall"
+            android:label="@string/title_activity_numbers_recall" >
+        </activity>
+        <activity
+            android:name=".activities.NumbersReview"
+            android:label="@string/title_activity_numbers_review" >
+        </activity>
+        <activity
+            android:name=".activities.StatActivity"
+            android:label="statistics" />
+    </application>
+
+</manifest>
