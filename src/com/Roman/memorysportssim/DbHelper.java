@@ -20,7 +20,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL("CREATE DATABASE stat(id integer primary key autoincrement, " +
+        db.execSQL("CREATE TABLE stat(id integer primary key autoincrement, " +
                 "date integer, " +
                 "digits integer, " +
                 "success integer, " +
@@ -49,7 +49,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static List<StatEntry> listEntries(Context ctx, int limit, int offset) {
         DbHelper helper = new DbHelper(ctx);
         SQLiteDatabase db = helper.getReadableDatabase();
-        Cursor c = db.query("stat", null, null, null, null, null, "date, desc", offset + "," + limit);
+        Cursor c = db.query("stat", null, null, null, null, null, "date desc", offset + "," + limit);
         List<StatEntry> res = new ArrayList<StatEntry>();
         if (c.moveToFirst()) {
             int dateIdx = c.getColumnIndex("date");

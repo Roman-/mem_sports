@@ -8,6 +8,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/lvStat"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:divider="#575757"
+        android:dividerHeight="2dp"
+        android:layout_gravity="top" />
 </LinearLayout>

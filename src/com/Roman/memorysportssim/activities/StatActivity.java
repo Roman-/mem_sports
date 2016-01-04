@@ -10,16 +10,21 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.Roman.memorysportssim.DbHelper;
 import com.Roman.memorysportssim.R;
+import com.Roman.memorysportssim.TimeUtils;
 import com.Roman.memorysportssim.model.StatEntry;
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 
 public class StatActivity extends Activity {
 
-    String[] names = { "Иван", "Марья", "Петр", "Антон", "Даша", "Борис",
-            "Костя", "Игорь", "Анна", "Денис", "Андрей", "Анна", "Денис", "Андрей" };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -28,18 +33,23 @@ public class StatActivity extends Activity {
 
         ListView lvStat = (ListView) findViewById(R.id.lvStat);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.stat_entry, names);
+        List<StatEntry> entries = DbHelper.listEntries(this, 100, 0);
 
-        lvStat.setAdapter(adapter);
+        lvStat.setAdapter(new StatEntryAdapter(this, entries));
 
     }
 
-    private class StatEntryAdapter extends ArrayAdapter<StatEntry> {
+    private static class StatEntryAdapter extends ArrayAdapter<StatEntry> {
 
+        private static SimpleDateFormat SDF = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.US);
 
-        public StatEntryAdapter(Activity activity, ArrayList<StatEntry> entries) {
+        private Activity activity;
+        private List<StatEntry> entries;
 
+        public StatEntryAdapter(Activity activity, List<StatEntry> entries) {
+            super(activity, R.layout.stat_layout_entry, entries);
+            this.activity = activity;
+            this.entries = entries;
         }
 
         @Override
@@ -49,19 +59,33 @@ public class StatActivity extends Activity {
             if (rowView == null) {
                 // Get a new instance of the row layout view
                 LayoutInflater inflater = activity.getLayoutInflater();
-                rowView = inflater.inflate(R.layout.rowlayout, null);
+                rowView = inflater.inflate(R.layout.stat_layout_entry, null, true);
 
                 // Hold the view objects in an object, that way the don't need to be "re-  finded"
                 view = new ViewHolder();
-                view.retaurant_name= (TextView) rowView.findViewById(R.id.restaurantname);
-                view.restaurant_address= (TextView) rowView.findViewById(R.id.textView1);
+                view.txtDate = (TextView) rowView.findViewById(R.id.txtDate);
+                view.upperLine= (TextView) rowView.findViewById(R.id.tvTop);
+                view.bottomLine= (TextView) rowView.findViewById(R.id.tvBottom);
 
                 rowView.setTag(view);
+            } else {
+                view = (ViewHolder) rowView.getTag();
             }
-            return super.getView(position, convertView, parent);
+
+            StatEntry e = entries.get(position);
+            view.txtDate.setText(SDF.format(e.getDate()));
+            view.upperLine.setText(e.getSuccess() + "/" + e.getDigits());
+
+            String bottomText = "Memo: " + TimeUtils.formatMillis(e.getMemMillis()) + "(" +
+            TimeUtils.formatMillis(e.getMemMillis() / e.getDigits()) + "), recall: " +
+                    TimeUtils.formatMillis(e.getRecallMillis());
+
+            view.bottomLine.setText(bottomText);
+            return rowView;
         }
 
         private static class ViewHolder {
+            private TextView txtDate;
             private TextView upperLine;
             private TextView bottomLine;
         }

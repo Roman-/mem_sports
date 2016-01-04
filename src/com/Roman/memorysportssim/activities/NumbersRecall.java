@@ -23,6 +23,7 @@ public class NumbersRecall extends Activity {
     String[] RecalledNumbers;
     EditText[] RecallEtvs;
     long timeInMilliseconds;
+    long startRecallTime;
 
     public String ShowTimeByMills(boolean upToMillis) {//when upToMillis == true, time is shown in mm:ss.tt format. Otherwise mm:ss
         int secs = (int) (timeInMilliseconds / 1000);
@@ -92,10 +93,15 @@ public class NumbersRecall extends Activity {
         endRecallButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                DbHelper.addStatEntry(NumbersRecall.this, 100, 40, 33, 44);
                 RecalledNumbers = new String[Numbers.length];
                 for (int i = 0; i < Numbers.length; i++)
                     RecalledNumbers[i] = RecallEtvs[i].getText().toString();
+                int nNumbers = 0;
+                for (String number: Numbers) {
+                    nNumbers += number.length();
+                }
+                DbHelper.addStatEntry(NumbersRecall.this, nNumbers, getCorrectNumbers(Numbers, RecalledNumbers),
+                        (int) timeInMilliseconds, (int) (System.currentTimeMillis() - startRecallTime));
                 Intent intent = new Intent(NumbersRecall.this, NumbersReview.class);
                 intent.putExtra("Numbers", Numbers);
                 intent.putExtra("RecalledNumbers", RecalledNumbers);
@@ -109,6 +115,22 @@ public class NumbersRecall extends Activity {
 
     }
 
+    private int getCorrectNumbers(String[] orig, String[] recalled) {
+        int nItems = Math.min(orig.length, recalled.length);
+        int nCorrect = 0;
+        for (int i = 0; i < nItems; i++) {
+            String origStr = orig[i];
+            String recalledStr = recalled[i];
+            int minLen = Math.min(origStr.length(), recalledStr.length());
+            for (int j = 0; j < minLen; j++) {
+                if (origStr.charAt(j) == recalledStr.charAt(j)) {
+                    nCorrect++;
+                }
+            }
+        }
+        return nCorrect;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,6 +139,7 @@ public class NumbersRecall extends Activity {
         Numbers = getIntent().getExtras().getStringArray("Numbers");
         timeInMilliseconds = getIntent().getExtras().getLong("Time");
         CreateRecallTable();
+        startRecallTime = System.currentTimeMillis();
     }
 
     @Override
