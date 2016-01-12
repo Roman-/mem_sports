@@ -24,8 +24,9 @@ public class DbHelper extends SQLiteOpenHelper {
                 "date integer, " +
                 "digits integer, " +
                 "success integer, " +
-                "mem_millis integer," +
-                "recall_millis integer)");
+                "mem_millis integer, " +
+                "recall_millis integer, " +
+                "event integer)");
     }
 
     @Override
@@ -33,7 +34,7 @@ public class DbHelper extends SQLiteOpenHelper {
 
     }
 
-    public static void addStatEntry(Context ctx, int digits, int success, int memMillis, int recallMillis) {
+    public static void addStatEntry(Context ctx, int digits, int success, int memMillis, int recallMillis, int event) {
         DbHelper helper = new DbHelper(ctx);
         ContentValues cv = new ContentValues();
         cv.put("date", System.currentTimeMillis());
@@ -41,6 +42,7 @@ public class DbHelper extends SQLiteOpenHelper {
         cv.put("success", success);
         cv.put("mem_millis", memMillis);
         cv.put("recall_millis", recallMillis);
+        cv.put("event", event);
         SQLiteDatabase db = helper.getWritableDatabase();
         db.insert("stat", null, cv);
         helper.close();
@@ -57,6 +59,7 @@ public class DbHelper extends SQLiteOpenHelper {
             int successIdx = c.getColumnIndex("success");
             int memMillisIdx = c.getColumnIndex("mem_millis");
             int recallMillisIdx = c.getColumnIndex("recall_millis");
+            int event = c.getColumnIndex("event");
             do {
                 StatEntry e = new StatEntry();
                 e.setDate(new Date(c.getLong(dateIdx)));
@@ -64,6 +67,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 e.setSuccess(c.getInt(successIdx));
                 e.setMemMillis(c.getInt(memMillisIdx));
                 e.setRecallMillis(c.getInt(recallMillisIdx));
+                e.setEvent(c.getInt(event));
                 res.add(e);
             } while (c.moveToNext());
         }

@@ -21,6 +21,9 @@ import android.widget.TextView;
 import com.Roman.memorysportssim.R;
 
 public class NumbersMemo extends Activity {
+    String event;
+    //    char[] myAlphabetChars = "БВГДЖЗКАИОУЛМНПРСТФХЧШЮЯ".toCharArray();
+    char[] myAlphabetChars = "АБВГДЕЖЗИКЛМНОПРСТУФМЧШ".toCharArray();
     long startTime = 0L;
     private Timer cdt, t;
     TextView timeTv, countDownTv;
@@ -148,18 +151,19 @@ public class NumbersMemo extends Activity {
                 tr.addView(TVs[i][j]);
             }
             tr.setId(1234 + i); // 1234, 1235, 1236, ...
-            tr.setVisibility(4); // invisible
+            tr.setVisibility(View.INVISIBLE); // invisible
             tl.addView(tr, new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
         }
         //TableRow buttonTr = NewTableRow();
         goButton = new Button(this);    //recall button
         goButton.setText("Recall");
-        goButton.setVisibility(4); // invis
+        goButton.setVisibility(View.INVISIBLE); // invis
         goButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(NumbersMemo.this, NumbersRecall.class);
                 intent.putExtra("Numbers", Numbers);
+                intent.putExtra("event", event);
                 intent.putExtra("Time", SystemClock.uptimeMillis() - startTime);
                 startActivity(intent);
                 finish();
@@ -170,10 +174,20 @@ public class NumbersMemo extends Activity {
     }
 
     void ShowTable() {
-        goButton.setVisibility(0);
+        goButton.setVisibility(View.VISIBLE);
         for (int i = 0; i < Numbers.length; i++)
-            findViewById(1234 + i).setVisibility(0);
+            findViewById(1234 + i).setVisibility(View.VISIBLE);
 
+    }
+
+    char generateElementByEvent(String event, int rnd) {
+        if (event.equals("letters"))
+            return myAlphabetChars[rnd];
+        if (event.equals("numbers"))
+            return Character.forDigit(rnd, 10);
+        if (event.equals("binaries"))
+            return Character.forDigit((rnd+1) % 2, 10); // govnocode.org confirmed
+        return '?';
     }
 
     void GenerateNumbers() { // in global array String[] Numbers;
@@ -187,7 +201,7 @@ public class NumbersMemo extends Activity {
                 digitsInRow = amountOfDigits % digitsPerRow; // last N digits
             char[] charArray = new char[digitsInRow]; // current string as a char array
             for (int j = 0; j < digitsInRow; j++) {
-                charArray[j] = Character.forDigit((rn.nextInt(10)), 10);
+                charArray[j] = generateElementByEvent(event, rn.nextInt(myAlphabetChars.length));
             }
             Numbers[i] = new String(charArray);// current string as a char array
         }
@@ -201,7 +215,7 @@ public class NumbersMemo extends Activity {
         amountOfDigits = getIntent().getExtras().getInt("amountOfDigits");
         groupBy = getIntent().getExtras().getInt("groupBy");
         digitsPerRow = getIntent().getExtras().getInt("digitsPerRow");
-
+        event = getIntent().getStringExtra("event");
         GenerateNumbers();
         CreateMaskedTable(); // requires global array String[] Numbers;
         StartCountDownTimer();//321 timer

@@ -6,7 +6,18 @@
     android:scrollbars="horizontal"
     android:stretchColumns="*"
     android:gravity="center">
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <Button
+            android:id="@+id/lettersButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:onClick="startLetters"
+            android:text="@string/startLetters" />
+
+    </TableRow>
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -19,6 +30,19 @@
             android:text="@string/startNumbers" />
 
     </TableRow>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/binariesButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:onClick="startBinaries"
+            android:text="@string/startBinaries" />
+
+    </TableRow>
+
     <TableRow
         android:layout_width="match_parent"
         android:layout_height="match_parent">

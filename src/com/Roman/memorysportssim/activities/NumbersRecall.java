@@ -19,6 +19,7 @@ import com.Roman.memorysportssim.DbHelper;
 import com.Roman.memorysportssim.R;
 
 public class NumbersRecall extends Activity {
+    String event;
     String[] Numbers;
     String[] RecalledNumbers;
     EditText[] RecallEtvs;
@@ -70,10 +71,26 @@ public class NumbersRecall extends Activity {
         RecallEtvs[i].setFilters(new InputFilter[]{new InputFilter.LengthFilter(Numbers[0].length())});
         RecallEtvs[i].setTextColor(getResources().getColor(R.color.memoTextColor));
         RecallEtvs[i].setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
-        RecallEtvs[i].setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        /* input restrinctions */
+        String event = getIntent().getStringExtra("event");
+        if (event.equals("numbers"))
+            RecallEtvs[i].setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        if (event.equals("letters"))
+            RecallEtvs[i].setInputType(InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+        if (event.equals("binaries"))
+            RecallEtvs[i].setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         tr.addView(RecallEtvs[i]);
     }
 
+    int getEventIdByName() {
+        if (event.equals("letters"))
+            return 0;
+        if (event.equals("numbers"))
+            return 1;
+        if (event.equals("binaries"))
+            return 2;
+        return -1;
+    }
     void CreateRecallTable() {
         RecallEtvs = new EditText[Numbers.length];
         TableLayout tl = (TableLayout) findViewById(R.id.TableLayout2);
@@ -100,8 +117,9 @@ public class NumbersRecall extends Activity {
                 for (String number: Numbers) {
                     nNumbers += number.length();
                 }
+                int eventId = getEventIdByName();
                 DbHelper.addStatEntry(NumbersRecall.this, nNumbers, getCorrectNumbers(Numbers, RecalledNumbers),
-                        (int) timeInMilliseconds, (int) (System.currentTimeMillis() - startRecallTime));
+                        (int) timeInMilliseconds, (int) (System.currentTimeMillis() - startRecallTime), eventId);
                 Intent intent = new Intent(NumbersRecall.this, NumbersReview.class);
                 intent.putExtra("Numbers", Numbers);
                 intent.putExtra("RecalledNumbers", RecalledNumbers);
@@ -135,7 +153,7 @@ public class NumbersRecall extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_numbers_recall);
-
+        event = getIntent().getStringExtra("event");
         Numbers = getIntent().getExtras().getStringArray("Numbers");
         timeInMilliseconds = getIntent().getExtras().getLong("Time");
         CreateRecallTable();

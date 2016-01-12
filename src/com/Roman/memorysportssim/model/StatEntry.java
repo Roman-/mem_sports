@@ -9,6 +9,7 @@ public class StatEntry {
     private int success;
     private int memMillis;
     private int recallMillis;
+    private int event;
 
     public Date getDate() {
         return date;
@@ -48,5 +49,13 @@ public class StatEntry {
 
     public void setRecallMillis(int recallMillis) {
         this.recallMillis = recallMillis;
+    }
+
+    public int getEvent() {
+        return event;
+    }
+
+    public void setEvent(int event) {
+        this.event = event;
     }
 }

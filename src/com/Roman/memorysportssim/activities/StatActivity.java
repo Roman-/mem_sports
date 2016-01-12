@@ -52,6 +52,18 @@ public class StatActivity extends Activity {
             this.entries = entries;
         }
 
+        private String getEventName(int eventId) {
+            switch (eventId) {
+                case 0:
+                    return "Letters";
+                case 1:
+                    return "Numbers";
+                case 2:
+                    return "Binaries";
+            }
+            return "Unknown";
+        }
+
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View rowView = convertView;
@@ -74,7 +86,7 @@ public class StatActivity extends Activity {
 
             StatEntry e = entries.get(position);
             view.txtDate.setText(SDF.format(e.getDate()));
-            view.upperLine.setText(e.getSuccess() + "/" + e.getDigits());
+            view.upperLine.setText(getEventName(e.getEvent()) + ": " + e.getSuccess() + "/" + e.getDigits());
 
             String bottomText = "Memo: " + TimeUtils.formatMillis(e.getMemMillis()) + "(" +
             TimeUtils.formatMillis(e.getMemMillis() / e.getDigits()) + "), recall: " +

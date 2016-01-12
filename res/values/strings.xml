@@ -8,7 +8,9 @@
     <string name="title_activity_numbers_memo">NumbersMemo</string>
     <string name="title_activity_numbers_recall">NumbersRecall</string>
     <string name="title_activity_numbers_review">NumbersReview</string>
-    <string name="startNumbers">Start numbers</string>
+    <string name="startNumbers">Numbers</string>
+    <string name="startLetters">Letters</string>
     <string name="showStat">Show stat</string>
+    <string name="startBinaries">Binaries</string>
 
 </resources>

@@ -22,6 +22,19 @@ public class MainActivity extends Activity {
 
     public void startNumbers(View view) {
         Intent intent = new Intent(MainActivity.this, NumbersSettings.class);
+        intent.putExtra("event", "numbers");
+        startActivity(intent);
+    }
+
+    public void startLetters(View view) {
+        Intent intent = new Intent(MainActivity.this, NumbersSettings.class);
+        intent.putExtra("event", "letters");
+        startActivity(intent);
+    }
+
+    public void startBinaries(View view) {
+        Intent intent = new Intent(MainActivity.this, NumbersSettings.class);
+        intent.putExtra("event", "binaries");
         startActivity(intent);
     }
 
