@@ -15,7 +15,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:onClick="startLetters"
-            android:text="@string/startLetters" />
+            android:text="@string/startLetters"
+            android:textColor="@color/buttonsTextColor"
+            android:background="@color/buttonsBackgroundColor" />
 
     </TableRow>
     <TableRow
@@ -27,7 +29,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:onClick="startNumbers"
-            android:text="@string/startNumbers" />
+            android:text="@string/startNumbers"
+            android:textColor="@color/buttonsTextColor"
+            android:background="@color/buttonsBackgroundColor"/>
 
     </TableRow>
     <TableRow
@@ -39,7 +43,9 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:onClick="startBinaries"
-            android:text="@string/startBinaries" />
+            android:text="@string/startBinaries"
+            android:textColor="@color/buttonsTextColor"
+            android:background="@color/buttonsBackgroundColor"/>
 
     </TableRow>
 
@@ -53,7 +59,8 @@
             android:layout_height="match_parent"
             android:onClick="showStat"
             android:text="@string/showStat"
-            android:layout_gravity="center_vertical" />
+            android:textColor="@color/buttonsTextColor"
+            android:background="@color/buttonsBackgroundColor"/>
 
     </TableRow>
 

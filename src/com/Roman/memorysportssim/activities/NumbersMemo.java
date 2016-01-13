@@ -180,13 +180,13 @@ public class NumbersMemo extends Activity {
 
     }
 
-    char generateElementByEvent(String event, int rnd) {
+    char generateElementByEvent(String event, Random rn) {
         if (event.equals("letters"))
-            return myAlphabetChars[rnd];
+            return myAlphabetChars[rn.nextInt(myAlphabetChars.length)];
         if (event.equals("numbers"))
-            return Character.forDigit(rnd, 10);
+            return Character.forDigit(rn.nextInt(10), 10);
         if (event.equals("binaries"))
-            return Character.forDigit((rnd+1) % 2, 10); // govnocode.org confirmed
+            return Character.forDigit(rn.nextInt(2), 10);
         return '?';
     }
 
@@ -201,7 +201,7 @@ public class NumbersMemo extends Activity {
                 digitsInRow = amountOfDigits % digitsPerRow; // last N digits
             char[] charArray = new char[digitsInRow]; // current string as a char array
             for (int j = 0; j < digitsInRow; j++) {
-                charArray[j] = generateElementByEvent(event, rn.nextInt(myAlphabetChars.length));
+                charArray[j] = generateElementByEvent(event, rn);
             }
             Numbers[i] = new String(charArray);// current string as a char array
         }

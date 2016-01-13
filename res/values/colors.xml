@@ -4,5 +4,7 @@
     <color name="tvBack2">#222222</color>
     <color name="MemoBackground">#000000</color>
     <color name="memoTextColor">#ffffff</color>
+    <color name="buttonsTextColor">#ffffff</color>
+    <color name="buttonsBackgroundColor">#323232</color>
     
 </resources>
