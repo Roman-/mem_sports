@@ -157,7 +157,7 @@ public class NumbersMemo extends Activity {
         //TableRow buttonTr = NewTableRow();
         goButton = new Button(this);    //recall button
         goButton.setText("Recall");
-        goButton.setVisibility(View.INVISIBLE); // invis
+        goButton.setVisibility(View.INVISIBLE);
         goButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -169,6 +169,8 @@ public class NumbersMemo extends Activity {
                 finish();
             }
         });
+        goButton.setTextColor(getResources().getColor(R.color.buttonsTextColor));
+        goButton.setBackgroundColor(getResources().getColor(R.color.buttonsBackgroundColor));
         tl.addView(goButton, new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.MATCH_PARENT));
 
     }
@@ -212,9 +214,9 @@ public class NumbersMemo extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_numbers_memo);
 
-        amountOfDigits = getIntent().getExtras().getInt("amountOfDigits");
+        amountOfDigits = getIntent().getExtras().getInt("amountOfItems");
         groupBy = getIntent().getExtras().getInt("groupBy");
-        digitsPerRow = getIntent().getExtras().getInt("digitsPerRow");
+        digitsPerRow = getIntent().getExtras().getInt("itemsPerRow");
         event = getIntent().getStringExtra("event");
         GenerateNumbers();
         CreateMaskedTable(); // requires global array String[] Numbers;

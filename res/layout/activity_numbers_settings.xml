@@ -45,7 +45,7 @@
         android:layout_alignBaseline="@+id/totalDigits"
         android:layout_alignBottom="@+id/totalDigits"
         android:layout_alignLeft="@+id/button1"
-        android:text="Amount of digits:"
+        android:text="Amount of items:"
         android:textColor="@color/memoTextColor" />
 
     <EditText
@@ -92,6 +92,6 @@
         android:layout_alignBaseline="@+id/digitsPerRow"
         android:layout_alignBottom="@+id/digitsPerRow"
         android:layout_alignLeft="@+id/TextView01"
-        android:text="Digits per row:" />
+        android:text="Items per row:" />
 
 </RelativeLayout>

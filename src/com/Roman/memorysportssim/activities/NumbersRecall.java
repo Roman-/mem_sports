@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -66,11 +68,44 @@ public class NumbersRecall extends Activity {
         tr.addView(rowNumberTv);
     }
 
-    void AddRecallTv(TableRow tr, int i) {
+    void requestEditTextFocus(EditText etToFocus) {
+        etToFocus.requestFocus();
+    }
+
+    void AddRecallTv(TableRow tr, final int i) {
+        final int lineSize = Numbers[0].length();
         RecallEtvs[i] = new EditText(this);
-        RecallEtvs[i].setFilters(new InputFilter[]{new InputFilter.LengthFilter(Numbers[0].length())});
+        RecallEtvs[i].setFilters(new InputFilter[]{new InputFilter.LengthFilter(lineSize)});
         RecallEtvs[i].setTextColor(getResources().getColor(R.color.memoTextColor));
         RecallEtvs[i].setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+        if (i != RecallEtvs.length - 1) {
+            RecallEtvs[i].addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) {
+                    if (RecallEtvs[i].getText().length() == lineSize)
+                        requestEditTextFocus(RecallEtvs[i + 1]);
+                }
+
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+            });
+        } else
+        {
+            RecallEtvs[i].addTextChangedListener(new TextWatcher() {
+                public void afterTextChanged(Editable s) {
+                    if (RecallEtvs[i].getText().length() == lineSize)
+                        RecallEtvs[i].clearFocus();
+                }
+
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+            });
+        }
         /* input restrinctions */
         String event = getIntent().getStringExtra("event");
         if (event.equals("numbers"))
@@ -114,7 +149,7 @@ public class NumbersRecall extends Activity {
                 for (int i = 0; i < Numbers.length; i++)
                     RecalledNumbers[i] = RecallEtvs[i].getText().toString();
                 int nNumbers = 0;
-                for (String number: Numbers) {
+                for (String number : Numbers) {
                     nNumbers += number.length();
                 }
                 int eventId = getEventIdByName();
@@ -128,6 +163,8 @@ public class NumbersRecall extends Activity {
                 finish();
             }
         });
+        endRecallButton.setTextColor(getResources().getColor(R.color.buttonsTextColor));
+        endRecallButton.setBackgroundColor(getResources().getColor(R.color.buttonsBackgroundColor));
         //Button.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
         tl.addView(endRecallButton, new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT));
 

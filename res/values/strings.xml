@@ -4,10 +4,10 @@
     <string name="app_name">Memory sports sim</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="title_activity_numbers_settings">NumbersSettings</string>
-    <string name="title_activity_numbers_memo">NumbersMemo</string>
-    <string name="title_activity_numbers_recall">NumbersRecall</string>
-    <string name="title_activity_numbers_review">NumbersReview</string>
+    <string name="title_activity_numbers_settings">Pre-settings</string>
+    <string name="title_activity_numbers_memo">Memorization</string>
+    <string name="title_activity_numbers_recall">Recall</string>
+    <string name="title_activity_numbers_review">Review</string>
     <string name="startNumbers">Numbers</string>
     <string name="startLetters">Letters</string>
     <string name="showStat">Show stat</string>
