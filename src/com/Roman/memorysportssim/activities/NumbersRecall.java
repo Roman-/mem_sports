@@ -106,12 +106,13 @@ public class NumbersRecall extends Activity {
                 }
             });
         }
-        /* input restrinctions */
+        /* input restrictions */
         String event = getIntent().getStringExtra("event");
         if (event.equals("numbers"))
             RecallEtvs[i].setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         if (event.equals("letters"))
-            RecallEtvs[i].setInputType(InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+            //RecallEtvs[i].setInputType(InputType.TYPE_TEXT_FLAG_CAP_CHARACTERS);
+        	RecallEtvs[i].setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
         if (event.equals("binaries"))
             RecallEtvs[i].setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
         tr.addView(RecallEtvs[i]);
@@ -147,7 +148,7 @@ public class NumbersRecall extends Activity {
             public void onClick(View view) {
                 RecalledNumbers = new String[Numbers.length];
                 for (int i = 0; i < Numbers.length; i++)
-                    RecalledNumbers[i] = RecallEtvs[i].getText().toString();
+                    RecalledNumbers[i] = RecallEtvs[i].getText().toString().toUpperCase();
                 int nNumbers = 0;
                 for (String number : Numbers) {
                     nNumbers += number.length();

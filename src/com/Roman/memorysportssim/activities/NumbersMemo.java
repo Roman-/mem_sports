@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.text.Html;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -31,7 +32,7 @@ public class NumbersMemo extends Activity {
     private Timer cdt, t;
     TextView timeTv, countDownTv;
     String[] Numbers; // lines (easy for review check)
-    int ConcentrationTime = 30;
+    int ConcentrationTime = 300; //replace by 3000
     TableRow countDownTr;
     TableLayout tl;
     Button goButton;
@@ -116,7 +117,7 @@ public class NumbersMemo extends Activity {
                 });
 
             }
-        }, 0, 250);
+        }, 0, 150);
     }
 
     TableRow NewTableRow() {
@@ -135,10 +136,11 @@ public class NumbersMemo extends Activity {
     	int startIndex = lpiTable.indexOf("^" + origin);
     	int endIndex = lpiTable.indexOf("^",startIndex+1);
     	
-    	if (startIndex != -1 && endIndex != -1)
-    		return lpiTable.substring(startIndex+3, endIndex);
-    	else
-    		return "cant find letters";
+    	String htmlText = (startIndex != -1 && endIndex != -1) ?
+    		lpiTable.substring(startIndex+3, endIndex) :
+    		"cant find letters";
+    	
+    	return htmlText;
     }
     
     void CreateMaskedTable() { // TODO border http://stackoverflow.com/questions/2108456/how-can-i-create-a-table-with-borders-in-android
@@ -190,7 +192,7 @@ public class NumbersMemo extends Activity {
 						switch (arg1.getAction()) {
 						case MotionEvent.ACTION_DOWN:
 							String hintString = getHint(((TextView)(arg0)).getText().toString());
-							goButton.setText(hintString);
+							goButton.setText(Html.fromHtml(hintString));
 							displayingHint = true;
 					        break;
 					    case MotionEvent.ACTION_UP:

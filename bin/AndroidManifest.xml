@@ -28,14 +28,17 @@
         </activity>
         <activity
             android:name=".activities.NumbersMemo"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_numbers_memo" >
         </activity>
         <activity
             android:name=".activities.NumbersRecall"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_numbers_recall" >
         </activity>
         <activity
             android:name=".activities.NumbersReview"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_numbers_review" >
         </activity>
         <activity
