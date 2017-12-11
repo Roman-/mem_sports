@@ -1,7 +1,6 @@
 package com.Roman.memorysportssim.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +14,7 @@ import com.Roman.memorysportssim.R;
 import com.Roman.memorysportssim.TimeUtils;
 import com.Roman.memorysportssim.model.StatEntry;
 
-import java.sql.Time;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 

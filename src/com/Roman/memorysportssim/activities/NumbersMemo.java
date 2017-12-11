@@ -1,5 +1,8 @@
 package com.Roman.memorysportssim.activities;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -11,6 +14,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -21,19 +25,40 @@ import android.widget.TextView;
 import com.Roman.memorysportssim.R;
 
 public class NumbersMemo extends Activity {
-    String event;
-    //    char[] myAlphabetChars = "БВГДЖЗКАИОУЛМНПРСТФХЧШЮЯ".toCharArray();
+    String event, lpiTable;
     char[] myAlphabetChars = "АБВГДЕЖЗИКЛМНОПРСТУФМЧШ".toCharArray();
     long startTime = 0L;
     private Timer cdt, t;
     TextView timeTv, countDownTv;
     String[] Numbers; // lines (easy for review check)
-    int ConcentrationTime = 3000;
+    int ConcentrationTime = 30;
     TableRow countDownTr;
     TableLayout tl;
     Button goButton;
     TextView[][] TVs;
     int amountOfDigits, groupBy, digitsPerRow;
+    boolean displayingHint;
+    
+    void loadLpiTable() {
+    	InputStream inputStream = getResources().openRawResource(
+                getResources().getIdentifier("lpimages",
+                "raw", getPackageName()));
+    	ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    	
+    	byte buf[] = new byte[1024];
+        int len;
+        try {
+            while ((len = inputStream.read(buf)) != -1) {
+                outputStream.write(buf, 0, len);
+            }
+            outputStream.close();
+            inputStream.close();
+        } catch (IOException e) {
+        	return;
+        }
+        
+        lpiTable = outputStream.toString();
+    }
 
     int BGColor(int i, int j) {
         if ((i + j) % 2 == 0)
@@ -54,7 +79,6 @@ public class NumbersMemo extends Activity {
         return String.format("%02d", mins) + ":" + String.format("%02d", secs);
     }
 
-
     public void StartTimer() {
         t = new Timer();
         t.scheduleAtFixedRate(new TimerTask() {
@@ -63,10 +87,10 @@ public class NumbersMemo extends Activity {
             public void run() {
                 runOnUiThread(new Runnable() {
                     public void run() {
-                        timeTv.setText(ShowTimeByMills(false));
+                    	if (!displayingHint)
+                    		timeTv.setText(ShowTimeByMills(false));
                     }
                 });
-
             }
         }, 0, 250);
     }
@@ -101,7 +125,22 @@ public class NumbersMemo extends Activity {
         tr.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
         return tr;
     }
+    
+    String getHint(String origin) {
+    	if (origin.length() != 2 ||
+    			(String.valueOf(myAlphabetChars)).indexOf(origin.charAt(0)) == -1 ||
+    			(String.valueOf(myAlphabetChars)).indexOf(origin.charAt(0)) == -1)
+    		return origin + " no hint";
 
+    	int startIndex = lpiTable.indexOf("^" + origin);
+    	int endIndex = lpiTable.indexOf("^",startIndex+1);
+    	
+    	if (startIndex != -1 && endIndex != -1)
+    		return lpiTable.substring(startIndex+3, endIndex);
+    	else
+    		return "cant find letters";
+    }
+    
     void CreateMaskedTable() { // TODO border http://stackoverflow.com/questions/2108456/how-can-i-create-a-table-with-borders-in-android
         int numberOfColumns = (int) Math.ceil((float) digitsPerRow / groupBy);
         int numberOfRows = (int) Math.ceil((float) amountOfDigits / digitsPerRow);
@@ -130,7 +169,6 @@ public class NumbersMemo extends Activity {
             rowNumberTv.setText("#" + Integer.toString(i + 1)); // till the end of the string
             rowNumberTv.setBackgroundColor(Color.rgb(12, 62, 12));
             rowNumberTv.setTextColor(getResources().getColor(R.color.memoTextColor));
-            //TVs[i][j].setTextSize(R.dimen.tableTextSize);
             rowNumberTv.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             tr.addView(rowNumberTv);
             if (i == numberOfRows - 1 && (amountOfDigits % digitsPerRow != 0)) // last row have less columns
@@ -145,8 +183,28 @@ public class NumbersMemo extends Activity {
                 TVs[i][j].setBackgroundColor(BGColor(i, j));
                 TVs[i][j].setPadding(3, 3, 3, 3);
                 TVs[i][j].setGravity(Gravity.CENTER);
+                TVs[i][j].setOnTouchListener(new View.OnTouchListener() {
+
+					@Override
+					public boolean onTouch(View arg0, MotionEvent arg1) {
+						switch (arg1.getAction()) {
+						case MotionEvent.ACTION_DOWN:
+							String hintString = getHint(((TextView)(arg0)).getText().toString());
+							goButton.setText(hintString);
+							displayingHint = true;
+					        break;
+					    case MotionEvent.ACTION_UP:
+					    	goButton.setText("Recall");
+					    	displayingHint = false;
+					    	break;
+					    }
+						return true;
+					}
+                	
+                });
                 TVs[i][j].setTextColor(getResources().getColor(R.color.memoTextColor));
                 //TVs[i][j].setTextSize(R.dimen.tableTextSize);
+                TVs[i][j].setTextSize(22); // hardcode just for now
                 TVs[i][j].setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
                 tr.addView(TVs[i][j]);
             }
@@ -179,7 +237,6 @@ public class NumbersMemo extends Activity {
         goButton.setVisibility(View.VISIBLE);
         for (int i = 0; i < Numbers.length; i++)
             findViewById(1234 + i).setVisibility(View.VISIBLE);
-
     }
 
     char generateElementByEvent(String event, Random rn) {
@@ -218,6 +275,8 @@ public class NumbersMemo extends Activity {
         groupBy = getIntent().getExtras().getInt("groupBy");
         digitsPerRow = getIntent().getExtras().getInt("itemsPerRow");
         event = getIntent().getStringExtra("event");
+        displayingHint = false;
+        loadLpiTable();
         GenerateNumbers();
         CreateMaskedTable(); // requires global array String[] Numbers;
         StartCountDownTimer();//321 timer

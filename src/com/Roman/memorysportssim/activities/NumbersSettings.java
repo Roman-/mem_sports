@@ -25,7 +25,7 @@ public class NumbersSettings extends Activity {
 			((EditText)findViewById(R.id.groupBy)).setText("3");
 			((EditText)findViewById(R.id.digitsPerRow)).setText("30");
 		} else if (event.equals("letters")) {
-			((EditText)findViewById(R.id.totalDigits)).setText("86");
+			((EditText)findViewById(R.id.totalDigits)).setText("40");
 			((EditText)findViewById(R.id.groupBy)).setText("2");
 			((EditText)findViewById(R.id.digitsPerRow)).setText("20");
 			Log.i("SET FOR LETTERS! ", event);

@@ -38,6 +38,9 @@
             android:name=".activities.NumbersReview"
             android:label="@string/title_activity_numbers_review" >
         </activity>
+        <activity
+            android:name=".activities.StatActivity"
+            android:label="statistics" />
     </application>
 
 </manifest>
